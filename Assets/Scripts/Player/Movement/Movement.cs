@@ -138,7 +138,7 @@ public partial class Movement : MonoBehaviour
 
     public virtual Quaternion CameraRotation()
     {
-        return EyeAngles.ToRotation();
+        return EyeAngles.ToRotation() * transform.rotation;
     }
 
     public virtual void WalkMove()

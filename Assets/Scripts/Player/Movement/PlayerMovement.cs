@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerMovement : Movement
 {
@@ -9,6 +12,8 @@ public class PlayerMovement : Movement
     public float CrouchHeight = 1;
 
     public float SlideHeight = 0.5f;
+
+    public float SwingHeight = 0.5f;
 
     public float RunSpeed = 190 * 0.0254f;
 
@@ -23,15 +28,24 @@ public class PlayerMovement : Movement
     public float SlideBoost = 500f * 0.0254f;
     public MoveModes MoveMode;
 
+    public Pole SwingPoint;
+
     public enum MoveModes
     {
         Walk,
         Crouch,
-        Slide
+        Slide,
+        Swing
     }
 
+    private MoveModes lastMode;
+    Vector3 lastPos;
+    float speed;
     public override void Update()
     {
+        speed = (transform.position - lastPos).magnitude / Time.deltaTime;
+        lastPos = transform.position;
+
         switch (MoveMode)
         {
             case MoveModes.Walk:
@@ -43,17 +57,51 @@ public class PlayerMovement : Movement
             case MoveModes.Slide:
                 Slide();
                 break;
+            case MoveModes.Swing:
+                Swing();
+                break;
+
         }
+
+        lastMode = MoveMode;
 
         base.Update();
     }
+
+
     float heightVelocity;
+
+    public void StartSwing(Pole pole)
+    {
+        SwingPoint = pole;
+        MoveMode = MoveModes.Swing;
+    }
+
+    private void Swing()
+    {
+        if (SwingPoint.IsUnityNull() || Input.GetButtonDown("Jump"))
+        {
+            MoveMode = MoveModes.Walk;
+            return;
+        }
+
+        var dir = SwingDirection();
+
+        Height = Mathf.SmoothDamp(Height, SwingHeight, ref heightVelocity, 0.1f);
+    }
+
     private void Walk()
     {
+
         if (MaxSpeed == SprintSpeed && controller.isGrounded && Input.GetButtonDown("Duck"))
         {
+            transform.position += Vector3.up * (Height - SlideHeight);
+
+            var speedMult = Mathf.Clamp01(speed / SprintSpeed);
+
+            Height = SlideHeight;
             MoveMode = MoveModes.Slide;
-            AddSpeed(SlideBoost, 1000);
+            AddSpeed(SlideBoost * speedMult, 1000);
             Slide();
             return;
         }
@@ -76,6 +124,8 @@ public class PlayerMovement : Movement
         if (Input.GetButton("Walk"))
             MaxSpeed = WalkSpeed;
     }
+
+   
 
     private void Slide()
     {
@@ -112,12 +162,60 @@ public class PlayerMovement : Movement
 
     public override void GroundVelocity()
     {
-        if (MoveMode != MoveModes.Slide)
+        switch (MoveMode)
         {
-            base.GroundVelocity();
-            return;
+            case MoveModes.Slide:
+                SlideVelocity();
+                return;
+            case MoveModes.Swing:
+                SwingVelocity();
+                return;
         }
 
+        base.GroundVelocity();
+    }
+
+    public override void AirVelocity()
+    {
+        switch (MoveMode)
+        {
+            case MoveModes.Swing:
+                SwingVelocity();
+                return;
+        }
+
+        base.AirVelocity();
+    }
+
+    public Vector3 SwingDirection()
+    {
+        var dirPos =
+            transform.position.ClosestPointOnLine(SwingPoint.transform.position, SwingPoint.transform.position + SwingPoint.transform.forward, false)
+            .WithY(transform.position.y);
+
+        var dir = Quaternion.LookRotation(SwingPoint.transform.position - dirPos) * Vector3.down;
+
+        return dir.normalized;
+    }
+
+    public void SwingVelocity()
+    {
+        Velocity = Velocity.ProjectVelocity(SwingDirection());
+
+        var toPivot = transform.position - SwingPoint.ClosestPoint(transform.position);
+        float currentDistance = toPivot.magnitude;
+        float desiredDistance = Height + 1.2f;
+
+        float stretch = currentDistance - desiredDistance;
+
+        if (MathF.Abs(stretch) > 0.001f)
+        {
+            Velocity += -toPivot.normalized * stretch * 10f;
+        }
+    }
+
+    public void SlideVelocity()
+    {
         ApplyFriction(SlideFriction);
 
         var wish = Velocity.WithY(0);
