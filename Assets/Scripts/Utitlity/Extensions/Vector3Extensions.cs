@@ -9,6 +9,10 @@ public static class Vector3Extensions
     public static Vector3 WithY(this Vector3 v3, float value) => new Vector3(v3.x, value, v3.z);
     public static Vector3 WithZ(this Vector3 v3, float value) => new Vector3(v3.x, v3.y, value);
 
+    public static Vector3 LerpTo(this Vector3 v3, Vector3 other, float frac) => Vector3.Lerp(v3, other, frac);
+
+    public static float DistanceTo(this Vector3 v3, Vector3 other) => Vector3.Distance(v3, other);
+
     public static Quaternion ToRotation(this Vector3 v3) => Quaternion.Euler(v3);
 
     public static Vector3 RotateVector(this Vector3 v, Quaternion q )
