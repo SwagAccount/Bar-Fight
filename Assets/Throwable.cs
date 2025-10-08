@@ -21,7 +21,7 @@ public class Throwable : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.root.TryGetComponent<HealthComponent>(out var hc))
-            hc.Health -= rb.velocity.magnitude * Damage * rb.mass;
+            hc.Health -= rb.velocity.magnitude * Damage;
         HealthComponent.Health -= rb.velocity.magnitude * Damage;
     }
 }

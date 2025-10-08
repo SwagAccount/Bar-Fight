@@ -12,8 +12,11 @@ public class NPC : MonoBehaviour
 
     [Header("References")]
     public Animator Animator;
+    public RagdollHelper RagdollHelper;
     private Rigidbody rb;
     private NavMeshPath path;
+    private GenericEvent genericEvent;
+    private HealthComponent HealthComponent;
     private Vector3 lastAnimatorPos;
 
     [Header("Punch")]
@@ -21,13 +24,13 @@ public class NPC : MonoBehaviour
     public float PunchRadius = 1;
     public float PunchRange = 1.5f;
 
-    GenericEvent genericEvent;
-
     float seed;
     void Start()
     {
+        HealthComponent = GetComponent<HealthComponent>();
         seed = Random.Range(0, 1000);
 
+        RagdollHelper = Animator.GetComponent<RagdollHelper>();
         genericEvent = Animator.GetComponent<GenericEvent>();
         genericEvent.EventListen += EventListen;
 
@@ -61,6 +64,16 @@ public class NPC : MonoBehaviour
 
     void Update()
     {
+        if (HealthComponent.Health <= 0)
+        {
+            Animator.transform.SetParent(null);
+            Animator.gameObject.AddComponent<TimedDestroyComponent>().Duration = 20;
+            Destroy(Animator);
+            RagdollHelper.SetKinematic(false);
+            Destroy(gameObject);
+            return;
+        }
+
         if (target == null)
             return;
 
