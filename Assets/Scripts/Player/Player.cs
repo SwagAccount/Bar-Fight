@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     public float PunchForce = 100;
     public float PunchRange = 4;
 
+    public float Health = 100f;
+
     public float ThrowForce = 500;
 
     public float SwingHandDistance = 0.5f;
@@ -38,20 +40,58 @@ public class Player : MonoBehaviour
         startArmRot = RightArm.transform.localRotation;
         Movement = GetComponent<PlayerMovement>();
     }
+
+    bool rightSwing;
+    bool wasntSwing;
+    bool swinging => Movement.MoveMode == PlayerMovement.MoveModes.Swing;
     void Update()
     {
+        if (Health <= 0)
+        {
+            Camera.main.GetComponent<Rigidbody>().isKinematic = false;
+            Destroy(gameObject);
+            return;
+        }
+
         ThrowablePos();
 
-        if (Movement.MoveMode == PlayerMovement.MoveModes.Swing)
+        if (swinging)
         {
-            if (LeftThrowable != null)
-                Throw(LeftThrowable);
 
-            if (RightThrowable != null)
+            if (wasntSwing)
+            {
+                bool leftFree = LeftThrowable == null;
+                bool rightFree = RightThrowable == null;
+
+                if (leftFree && !rightFree)
+                {
+                    rightSwing = false;
+                }
+                else if (rightFree && !leftFree)
+                {
+                    rightSwing = true;
+                }
+                else
+                {
+                    rightSwing = false;
+                }
+            }
+
+            if (RightThrowable != null && rightSwing)
+            {
                 Throw(RightThrowable);
+            }
+            if (LeftThrowable != null && !rightSwing)
+            {
+                Throw(LeftThrowable);
+            }
+
+            wasntSwing = false;
 
             return;
         }
+
+        wasntSwing = true;
 
         if (LeftThrowable == null)
             LeftArm.SetBool("Grab", false);
@@ -76,33 +116,60 @@ public class Player : MonoBehaviour
 
     void HandPositioning()
     {
+
+        var targetPosL = LeftArm.transform.parent.TransformPoint( startArmPos );
+        var targetRotL = LeftArm.transform.parent.rotation * startArmRot;
+
+        var targetPosR = targetPosL;
+        var targetRotR = targetRotL;
+
         if (LeftThrowable != null)
         {
             LeftArm.SetBool("Grab", true);
-            PositionHand(LeftArm.gameObject, LeftHand, LeftThrowable.LeftGrab.transform.position);
-            RotateHand(LeftArm.gameObject, LeftHand, LeftThrowable.LeftGrab.transform.rotation);
+            targetPosL = PositionHand(LeftArm.gameObject, LeftHand, LeftThrowable.LeftGrab.transform.position);
+            targetRotL = RotateHand(LeftArm.gameObject, LeftHand, LeftThrowable.LeftGrab.transform.rotation);
         }
 
         if (RightThrowable != null)
         {
             RightArm.SetBool("Grab", true);
-            PositionHand(RightArm.gameObject, RightHand, RightThrowable.RightGrab.transform.position);
-            RotateHand(RightArm.gameObject, RightHand, RightThrowable.RightGrab.transform.rotation);
+            targetPosR = PositionHand(RightArm.gameObject, RightHand, RightThrowable.RightGrab.transform.position);
+            targetRotR = RotateHand(RightArm.gameObject, RightHand, RightThrowable.RightGrab.transform.rotation);
         }
+
+        if (swinging && !rightSwing)
+        {
+            LeftArm.SetBool("Grab", true);
+            targetPosL = PositionHand(LeftArm.gameObject, LeftHand, Movement.SwingPoint.ClosestPoint(transform.position));
+            targetRotL = RotateHand(LeftArm.gameObject, LeftHand, LeftArm.transform.parent.rotation * quaternion.Euler(-90, 0, 0));
+        }
+
+        if (swinging && rightSwing)
+        {
+            RightArm.SetBool("Grab", true);
+            targetPosR = PositionHand(RightArm.gameObject, RightHand, Movement.SwingPoint.ClosestPoint(transform.position));
+            targetRotR = RotateHand(RightArm.gameObject, RightHand, LeftArm.transform.parent.rotation * quaternion.Euler(-90, 0, 0));
+        }
+
+        LeftArm.transform.position = targetPosL;
+        LeftArm.transform.rotation = targetRotL;
+
+        RightArm.transform.position = targetPosR;
+        RightArm.transform.rotation = targetRotR;
     }
 
-    void PositionHand(GameObject Arm, GameObject Hand, Vector3 target)
+    Vector3 PositionHand(GameObject Arm, GameObject Hand, Vector3 target)
     {
         Vector3 handOffset = Hand.transform.position - Arm.transform.position;
 
-        Arm.transform.position = target - handOffset;
+        return target - handOffset;
     }
 
-    void RotateHand(GameObject Arm, GameObject Hand, Quaternion targetRot)
+    Quaternion RotateHand(GameObject Arm, GameObject Hand, Quaternion targetRot)
     {
         Quaternion handLocalRot = Quaternion.Inverse(Arm.transform.rotation) * Hand.transform.rotation;
 
-        Arm.transform.rotation = targetRot * Quaternion.Inverse(handLocalRot);
+        return targetRot * Quaternion.Inverse(handLocalRot);
     }
 
     void ThrowablePos()
@@ -110,13 +177,13 @@ public class Player : MonoBehaviour
         if (LeftThrowable != null)
         {
             LeftThrowable.transform.localPosition = LeftThrowable.transform.localPosition.LerpTo(ItemOffset.WithX(-ItemOffset.x), 5 * Time.deltaTime);
-            LeftThrowable.transform.localRotation = Quaternion.Slerp(LeftThrowable.transform.localRotation, Quaternion.identity, 5 * Time.deltaTime);
+            LeftThrowable.transform.localRotation = Quaternion.identity;
         }
 
         if (RightThrowable != null)
         {
             RightThrowable.transform.localPosition = RightThrowable.transform.localPosition.LerpTo(ItemOffset, 5 * Time.deltaTime);
-            RightThrowable.transform.localRotation = Quaternion.Slerp(RightThrowable.transform.localRotation, Quaternion.identity, 5 * Time.deltaTime);
+            RightThrowable.transform.localRotation = Quaternion.identity;
         }
     }
 
@@ -157,6 +224,9 @@ public class Player : MonoBehaviour
 
     void Attacking(bool left, TimeSince timeSince, Throwable throwable)
     {
+        if (!left == rightSwing && swinging)
+            return;
+
         if (throwable != null)
         {
             if (Input.GetButtonDown(left ? "Fire1" : "Fire2"))
@@ -212,9 +282,11 @@ public class Player : MonoBehaviour
     {
         throwable.transform.SetParent(LeftArm.transform.root);
 
+
+
         throwable.rb.isKinematic = true;
 
-        if (both)
+        if (both && throwable.twoHands)
         {
             LeftThrowable = throwable;
             RightThrowable = throwable;
