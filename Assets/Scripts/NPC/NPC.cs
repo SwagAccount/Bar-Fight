@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -40,6 +41,15 @@ public class NPC : MonoBehaviour
 
         path = new NavMeshPath();
         lastAnimatorPos = Animator.transform.localPosition;
+
+        RandomAnimator();
+    }
+
+    async void RandomAnimator()
+    {
+        Animator.enabled = false;
+        await Task.Delay(Random.Range(0, 1500));
+        Animator.enabled = true;
     }
 
     public void EventListen(AnimationEvent @event)

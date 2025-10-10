@@ -41,10 +41,26 @@ public class PlayerMovement : Movement
     private MoveModes lastMode;
     Vector3 lastPos;
     float speed;
+
+    TimeSince lastStep;
+
+    public SoundEvent StepSound;
+
     public override void Update()
     {
         speed = (transform.position - lastPos).magnitude / Time.deltaTime;
         lastPos = transform.position;
+
+        if (speed > MathF.Min(WalkSpeed, CrouchSpeed) / 2 && controller.isGrounded && MoveMode != MoveModes.Slide)
+        {
+            var cadence = 1 / (1.865f + 0.213f * speed);
+
+            if (lastStep > cadence)
+            {
+                lastStep = 0;
+                Step();
+            }
+        }
 
         switch (MoveMode)
         {
@@ -66,6 +82,12 @@ public class PlayerMovement : Movement
         lastMode = MoveMode;
 
         base.Update();
+    }
+
+    public void Step()
+    {
+        var volume = Mathf.Clamp01(speed / SprintSpeed);
+        StepSound.Play(transform.position, volume, forcePlay: true);
     }
 
 

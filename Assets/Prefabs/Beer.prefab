@@ -1186,6 +1186,8 @@ MonoBehaviour:
   RightGrab: {fileID: 889191479063629512}
   twoHands: 0
   rb: {fileID: 5788479641872367893}
+  lastThrow:
+    _timeStamp: 0
 --- !u!114 &3440040414714576076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1212,8 +1214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d82fc2635838e4eaad44882d8f8417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 100
-  MaxHealth: 100
+  Health: 50
+  MaxHealth: 50
 --- !u!1 &6922259395548787844
 GameObject:
   m_ObjectHideFlags: 0

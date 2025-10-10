@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 244ac98a1315fa54d936ba0c6f1745eb, type: 3}
+  m_Name: SoundEvent
+  m_EditorClassIdentifier: 
+  Volume: 0.2
+  RandomVolume: 1
+  VolumeMax: 0.3
+  Pitch: 0.5
+  RandomPitch: 1
+  PitchMax: 0.8
+  SpacialBlend: 1
+  Sounds:
+  - {fileID: 8300000, guid: acb8c4b6de2568b47a00440de841c648, type: 3}
+  - {fileID: 8300000, guid: d7ae5e8418ca9934ebba8bf56aa2ef06, type: 3}
+  - {fileID: 8300000, guid: b2958d524ee91fa4c91b6e3a39e7b6bc, type: 3}
+  - {fileID: 8300000, guid: cdf2e49d8060f184fbcf462e03f17c43, type: 3}
