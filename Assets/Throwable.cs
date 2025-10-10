@@ -12,16 +12,41 @@ public class Throwable : MonoBehaviour
     public Rigidbody rb;
     HealthComponent HealthComponent;
 
+    public TimeSince lastThrow;
+
     private void Start()
     {
+        lastThrow = Time.time + 10000;
         HealthComponent = GetComponent<HealthComponent>();
         rb = GetComponent<Rigidbody>();
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (lastThrow > 10)
+            return;
+
         if (collision.transform.root.TryGetComponent<HealthComponent>(out var hc))
             hc.Health -= rb.velocity.magnitude * Damage;
         HealthComponent.Health -= rb.velocity.magnitude * Damage;
+    }
+
+    public void SetLayer( int layer)
+    {
+        SetLayer(gameObject, layer);
+    }
+
+    void SetLayer(GameObject gameObject, int layer)
+    {
+        gameObject.layer = layer;
+
+        foreach (Transform child in gameObject.transform)
+        {
+            if (!child.gameObject.activeSelf)
+                continue;
+
+            if (child != null)
+                SetLayer(child.gameObject, layer);
+        }
     }
 }

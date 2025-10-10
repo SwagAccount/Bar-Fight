@@ -1181,7 +1181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6c80b70da31e644782bc536ad663578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 10
+  Damage: 5
   LeftGrab: {fileID: 8834992232000715966}
   RightGrab: {fileID: 889191479063629512}
   twoHands: 0

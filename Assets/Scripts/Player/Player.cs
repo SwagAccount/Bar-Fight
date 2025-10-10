@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -259,10 +261,11 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out var piorityRay, PunchRange, PlayerMask))
             ray = piorityRay;
 
-        if (ray.collider.TryGetComponent<Rigidbody>(out var rb))
-        {
+        if (ray.collider.transform.root.TryGetComponent<Rigidbody>(out var rb))
             rb.AddForceAtPosition(Camera.main.transform.forward * PunchForce + Movement.Velocity * 50, ray.point);
-        }
+
+        if (ray.collider.transform.root.TryGetComponent<HealthComponent>(out var hc))
+            hc.Health -= PunchDamage;
     }
 
     void Pickup(bool left, bool both)
@@ -282,7 +285,7 @@ public class Player : MonoBehaviour
     {
         throwable.transform.SetParent(LeftArm.transform.root);
 
-
+        throwable.SetLayer(9);
 
         throwable.rb.isKinematic = true;
 
@@ -299,7 +302,7 @@ public class Player : MonoBehaviour
             RightThrowable = throwable;
     }
 
-    void Throw(Throwable throwable)
+    async void Throw(Throwable throwable)
     {
         throwable.rb.isKinematic = false;
 
@@ -316,5 +319,13 @@ public class Player : MonoBehaviour
         }
 
         throwable.transform.SetParent(null);
+        throwable.lastThrow = 0;
+
+        await Task.Delay(1000);
+
+        if (throwable.IsUnityNull())
+            return;
+
+        throwable?.SetLayer(6);
     }
 }
