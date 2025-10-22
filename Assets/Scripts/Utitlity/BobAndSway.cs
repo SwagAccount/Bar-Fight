@@ -8,6 +8,7 @@ public class BobAndSway : MonoBehaviour
     void Start()
     {
         player = FindFirstObjectByType<PlayerMovement>();
+        transform.SetParent(null);
     }
 
     Vector3 smoothedVel;
