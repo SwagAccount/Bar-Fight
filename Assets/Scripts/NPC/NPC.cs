@@ -87,13 +87,12 @@ public class NPC : MonoBehaviour
         if (target == null)
             return;
 
-        if (!NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path))
-            return;
+        var pathMade = NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
 
-        if (path.corners.Length < 2)
-            return;
+        Vector3 toNext = (target.position - transform.position).WithY(0);
+        if (pathMade && path.corners.Length > 1)
+            toNext = (path.corners[1] - transform.position).WithY(0);
 
-        Vector3 toNext = (path.corners[1] - transform.position).WithY(0);
         Vector3 targetDir = toNext.normalized;
 
         if (targetDir.sqrMagnitude > 0.001f)

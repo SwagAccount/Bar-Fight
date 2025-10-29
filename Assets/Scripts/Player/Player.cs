@@ -264,6 +264,9 @@ public class Player : MonoBehaviour
         if (ray.collider.transform.root.TryGetComponent<Rigidbody>(out var rb))
             rb.AddForceAtPosition(Camera.main.transform.forward * PunchForce + Movement.Velocity * 50, ray.point);
 
+        if (ray.collider.CompareTag("NoPunch"))
+            return;
+
         if (ray.collider.transform.root.TryGetComponent<HealthComponent>(out var hc))
             hc.Health -= PunchDamage;
     }
