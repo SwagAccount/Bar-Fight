@@ -6,6 +6,7 @@ public class Destructable : MonoBehaviour
 {
     public float ExplosionForce = 200;
     HealthComponent HealthComponent;
+    public SoundEvent BreakSound;
     public void Start()
     {
         HealthComponent = GetComponent<HealthComponent>();
@@ -27,6 +28,9 @@ public class Destructable : MonoBehaviour
 
             rb.AddForce((rb.worldCenterOfMass - transform.position).normalized * 200);
         }
+
+        if (BreakSound != null)
+            BreakSound.Play(transform.position);
 
         Destroy(gameObject);
     }

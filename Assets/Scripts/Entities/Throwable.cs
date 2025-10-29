@@ -28,7 +28,23 @@ public class Throwable : MonoBehaviour
 
         if (collision.transform.root.TryGetComponent<HealthComponent>(out var hc))
             hc.Health -= rb.velocity.magnitude * Damage;
+
         HealthComponent.Health -= rb.velocity.magnitude * Damage;
+
+        Surface.DoImpact(collision.transform.gameObject, GetAverageContactPoint(collision));
+    }
+
+    Vector3 GetAverageContactPoint(Collision collision)
+    {
+        if (collision.contactCount == 0)
+            return Vector3.zero;
+
+        Vector3 sum = Vector3.zero;
+
+        foreach (var contact in collision.contacts)
+            sum += contact.point;
+
+        return sum / collision.contactCount;
     }
 
     public void SetLayer( int layer)

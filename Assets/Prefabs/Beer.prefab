@@ -1201,6 +1201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExplosionForce: 200
+  BreakSound: {fileID: 11400000, guid: bc760c7ca94ba0e4da6f894a0b14ab79, type: 2}
   Destructed: {fileID: 7489018615735834363}
 --- !u!114 &8478934601232466559
 MonoBehaviour:

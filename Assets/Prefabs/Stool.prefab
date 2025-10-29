@@ -2929,6 +2929,8 @@ MonoBehaviour:
   RightGrab: {fileID: 4715732855984687357}
   twoHands: 1
   rb: {fileID: 6593404899772337677}
+  lastThrow:
+    _timeStamp: 0
 --- !u!114 &3713813583727255005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2956,6 +2958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExplosionForce: 200
+  BreakSound: {fileID: 11400000, guid: 24e04697b04c5d844a7fbf2c9e58a6c6, type: 2}
   Destructed: {fileID: 4055178414085818461}
 --- !u!1 &8493044331914210321
 GameObject:

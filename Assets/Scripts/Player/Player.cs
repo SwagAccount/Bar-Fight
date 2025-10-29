@@ -258,6 +258,8 @@ public class Player : MonoBehaviour
         if (!Physics.SphereCast(Camera.main.transform.position, 0.5f, Camera.main.transform.forward, out ray, PunchRange, PlayerMask))
             return;
 
+        Surface.DoImpact(ray.collider.gameObject, ray.point);
+
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out var piorityRay, PunchRange, PlayerMask))
             ray = piorityRay;
 
