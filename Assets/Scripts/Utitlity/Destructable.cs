@@ -19,7 +19,7 @@ public class Destructable : MonoBehaviour
 
         Destructed.SetActive(true);
         Destructed.transform.SetParent(null);
-        Destructed.AddComponent<TimedDestroyComponent>().Duration = 20;
+        //Destructed.AddComponent<TimedDestroyComponent>().Duration = 20;
 
         foreach (Transform child in Destructed.transform)
         {
@@ -30,7 +30,7 @@ public class Destructable : MonoBehaviour
         }
 
         if (BreakSound != null)
-            BreakSound.Play(transform.position);
+            BreakSound.Play(transform.position, forcePlay: true);
 
         Destroy(gameObject);
     }

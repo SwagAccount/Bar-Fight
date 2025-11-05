@@ -37,7 +37,7 @@ public class SoundEvent : ScriptableObject
             source.volume += UnityEngine.Random.Range(0, Volume - VolumeMax);
         source.volume *= volumeMult;
 
-        source.pitch = source.pitch;
+        source.pitch = Pitch;
         if (RandomPitch)
             source.pitch += UnityEngine.Random.Range(0, Pitch - PitchMax);
         source.pitch *= pitchMult;

@@ -77,7 +77,7 @@ public class NPC : MonoBehaviour
         if (HealthComponent.Health <= 0)
         {
             Animator.transform.SetParent(null);
-            Animator.gameObject.AddComponent<TimedDestroyComponent>().Duration = 20;
+            //Animator.gameObject.AddComponent<TimedDestroyComponent>().Duration = 20;
             Destroy(Animator);
             RagdollHelper.SetKinematic(false);
             Destroy(gameObject);

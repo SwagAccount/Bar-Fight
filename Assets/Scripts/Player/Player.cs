@@ -313,12 +313,14 @@ public class Player : MonoBehaviour
 
         if (LeftThrowable == throwable)
         {
+            throwable.rb.velocity = Movement.Velocity;
             throwable.rb.AddForce(Camera.main.transform.forward * ThrowForce);
             LeftThrowable = null;
         }
             
         if (RightThrowable == throwable)
         {
+            throwable.rb.velocity = Movement.Velocity;
             throwable.rb.AddForce(Camera.main.transform.forward * ThrowForce);
             RightThrowable = null;
         }

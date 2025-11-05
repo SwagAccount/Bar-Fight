@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 244ac98a1315fa54d936ba0c6f1745eb, type: 3}
+  m_Name: glass
+  m_EditorClassIdentifier: 
+  Volume: 1
+  RandomVolume: 0
+  VolumeMax: 1
+  Pitch: 0.9
+  RandomPitch: 1
+  PitchMax: 1
+  SpacialBlend: 1
+  Sounds:
+  - {fileID: 8300000, guid: 5ab20f1b01af6c243afea0987dd6881e, type: 3}
+  - {fileID: 8300000, guid: f1669fd2c99315843a80c0d84a64757a, type: 3}
+  - {fileID: 8300000, guid: 24a9329be876fed4fa4340b98bd2ef9e, type: 3}

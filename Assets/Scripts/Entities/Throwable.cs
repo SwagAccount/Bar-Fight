@@ -23,15 +23,17 @@ public class Throwable : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (lastThrow > 10)
-            return;
 
-        if (collision.transform.root.TryGetComponent<HealthComponent>(out var hc))
+        if (collision.transform.root.TryGetComponent<HealthComponent>(out var hc) && lastThrow < 10)
             hc.Health -= rb.velocity.magnitude * Damage;
 
-        HealthComponent.Health -= rb.velocity.magnitude * Damage;
+        if (HealthComponent != null)
+            HealthComponent.Health -= rb.velocity.magnitude * Damage;
 
-        Surface.DoImpact(collision.transform.gameObject, GetAverageContactPoint(collision));
+        var point = GetAverageContactPoint(collision);
+
+        Surface.DoImpact(collision.transform.gameObject, point, Mathf.Clamp01(rb.velocity.magnitude-1), forcePlay: lastThrow < 10);
+        Surface.DoImpact(gameObject, point, Mathf.Clamp01(rb.velocity.magnitude-1), forcePlay: lastThrow < 10);
     }
 
     Vector3 GetAverageContactPoint(Collision collision)

@@ -731,7 +731,7 @@ MonoBehaviour:
   RightHand: {fileID: 6555102034740185132}
   ItemOffset: {x: 0.12, y: -0.17, z: 0.36}
   PunchTime: 0.4
-  PunchDamage: 50
+  PunchDamage: 12.5
   PunchForce: 500
   PunchRange: 3
   Health: 100

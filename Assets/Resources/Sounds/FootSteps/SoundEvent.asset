@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 244ac98a1315fa54d936ba0c6f1745eb, type: 3}
   m_Name: SoundEvent
   m_EditorClassIdentifier: 
-  Volume: 0.2
+  Volume: 0.7
   RandomVolume: 1
-  VolumeMax: 0.3
+  VolumeMax: 1
   Pitch: 0.5
   RandomPitch: 1
   PitchMax: 0.8

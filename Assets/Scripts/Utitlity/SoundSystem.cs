@@ -47,7 +47,7 @@ public class SoundSystem : MonoBehaviour
 
         if (source.isPlaying && !forcePlay)
             return;
-        Debug.Log($"soundSuccess {Time.time}");
+
         source.Stop();
         soundEvent.Apply(source, volumeMult, pitchMult);
         source.transform.position = position;
