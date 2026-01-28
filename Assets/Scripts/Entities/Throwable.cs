@@ -19,6 +19,7 @@ public class Throwable : MonoBehaviour
         lastThrow = Time.time + 10000;
         HealthComponent = GetComponent<HealthComponent>();
         rb = GetComponent<Rigidbody>();
+        transform.SetParent(null);
     }
 
     void OnCollisionEnter(Collision collision)

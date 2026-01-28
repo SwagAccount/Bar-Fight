@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     public float PunchRange = 4;
 
     public float Health = 100f;
+    public float RegenSpeed = 20f;
 
     public float ThrowForce = 500;
 
@@ -52,8 +53,11 @@ public class Player : MonoBehaviour
         {
             Camera.main.GetComponent<Rigidbody>().isKinematic = false;
             Destroy(gameObject);
+            GameManager.Restart(5);
             return;
         }
+
+        Health = Mathf.Clamp(Health + RegenSpeed * Time.deltaTime, -100, 100);
 
         ThrowablePos();
 

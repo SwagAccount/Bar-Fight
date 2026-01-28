@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 244ac98a1315fa54d936ba0c6f1745eb, type: 3}
+  m_Name: Chatter
+  m_EditorClassIdentifier: 
+  Volume: 0.5
+  RandomVolume: 0
+  VolumeMax: 1
+  Pitch: 0.7
+  RandomPitch: 0
+  PitchMax: 1
+  SpacialBlend: 1
+  Sounds:
+  - {fileID: 8300000, guid: 0a7b97eaffb3879459fab5ddfb04800c, type: 3}
+  - {fileID: 8300000, guid: 9c42b0ef2c81b3348a4fc085612af9cc, type: 3}
+  - {fileID: 8300000, guid: ca2063e6a7104c14dbe68b1d867a42d0, type: 3}
+  - {fileID: 8300000, guid: c76d4dcad3f308b4a9575676fa02d6a3, type: 3}
+  - {fileID: 8300000, guid: 21116aa86d56ea546ae0bd5626311b40, type: 3}
+  - {fileID: 8300000, guid: 654fc3a12d9aacc48ac4582d5e8f69bb, type: 3}
+  - {fileID: 8300000, guid: 5f85d1765e2ded549b511b4b84563bc0, type: 3}
+  - {fileID: 8300000, guid: 9934d430215f72940b04a10a58ef33db, type: 3}
+  - {fileID: 8300000, guid: 3a7c2eb157362bb4ea6faae322332eff, type: 3}
+  - {fileID: 8300000, guid: 399ae4a3ae169b84c835a221333aa845, type: 3}
+  - {fileID: 8300000, guid: 46fad6be262aec446b6b25d3cc23d02c, type: 3}
+  - {fileID: 8300000, guid: 03cdaaccb3b68274f934b81b3d092c5d, type: 3}

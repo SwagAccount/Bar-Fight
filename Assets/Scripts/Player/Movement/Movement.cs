@@ -17,6 +17,7 @@ public partial class Movement : MonoBehaviour
     public float Friction = 6f;
     public float JumpPower = 268f * 0.0254f;
     public float Gravity = 600f * 0.0254f;
+    public float Sens = 1000;
 
     public float Radius = 16.0f * 0.0254f;
 
@@ -77,6 +78,18 @@ public partial class Movement : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
+        // Sensitivity adjust
+        if (Input.GetKeyDown(KeyCode.LeftBracket))
+        {
+            Sens -= 100;
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightBracket))
+        {
+            Sens += 100;
+        }
+
+
         UpdateHeight();
 
         BuildWishVelocity();
@@ -124,7 +137,7 @@ public partial class Movement : MonoBehaviour
         var eyeAngles = EyeAngles;
 
         if (!IgnoreCam)
-            eyeAngles += Vector3Extensions.AnalogLook * 1000 * Time.deltaTime;
+            eyeAngles += Vector3Extensions.AnalogLook * Sens * Time.deltaTime;
 
         eyeAngles = eyeAngles.WithX(Mathf.Clamp(eyeAngles.x,-89f, 89f));
 

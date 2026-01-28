@@ -25,6 +25,13 @@ public class NPC : MonoBehaviour
     public float PunchRadius = 1;
     public float PunchRange = 1.5f;
 
+    [Header("Sounds")]
+    public SoundEvent Chatter;
+    public Vector2 ChatterRate = new Vector2(1, 5);
+
+    TimeSince lastChatter;
+
+    float nextChatter;
     float seed;
     void Start()
     {
@@ -35,12 +42,16 @@ public class NPC : MonoBehaviour
         genericEvent = Animator.GetComponent<GenericEvent>();
         genericEvent.EventListen += EventListen;
 
+        transform.SetParent(null);
+
         rb = GetComponent<Rigidbody>();
         if (Animator == null)
             Animator = GetComponent<Animator>();
 
         path = new NavMeshPath();
         lastAnimatorPos = Animator.transform.localPosition;
+
+        nextChatter = Random.Range(ChatterRate.x, ChatterRate.y+1);
 
         RandomAnimator();
     }
@@ -60,12 +71,13 @@ public class NPC : MonoBehaviour
 
     void Punch()
     {
+        
         var colliders = Physics.OverlapSphere(PunchPoint.transform.position, PunchRadius);
         foreach(var collider in colliders)
         {
-            if (!collider.TryGetComponent<Player>(out var player ))
-                return;
-
+            if (!collider.TryGetComponent<Player>(out var player))
+                continue;
+            
             player.Health -= 35 ;
 
             break;
@@ -82,6 +94,13 @@ public class NPC : MonoBehaviour
             RagdollHelper.SetKinematic(false);
             Destroy(gameObject);
             return;
+        }
+
+        if (lastChatter > nextChatter)
+        {
+            Chatter.Play(transform.position);
+            nextChatter = Random.Range(ChatterRate.x, ChatterRate.y+1);
+            lastChatter = 0;
         }
 
         if (target == null)

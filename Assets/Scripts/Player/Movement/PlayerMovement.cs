@@ -87,7 +87,7 @@ public class PlayerMovement : Movement
     public void Step()
     {
         var volume = Mathf.Clamp01(speed / SprintSpeed);
-        StepSound.Play(transform.position, volume, forcePlay: true);
+        StepSound?.Play(transform.position, volume, forcePlay: true);
     }
 
 

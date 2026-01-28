@@ -765,12 +765,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  rotationSpeed: 2
+  rotationSpeed: 6
   Animator: {fileID: 4372432833641268071}
   RagdollHelper: {fileID: 8984765302007387610}
   PunchPoint: {fileID: 3812214522757586654}
   PunchRadius: 1
   PunchRange: 3
+  Chatter: {fileID: 11400000, guid: c7abfdafbde16b14c984d48990dc8d06, type: 2}
+  ChatterRate: {x: 1, y: 5}
 --- !u!95 &1422814535844313186
 Animator:
   serializedVersion: 5
